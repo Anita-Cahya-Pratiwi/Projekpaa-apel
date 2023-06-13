@@ -13,9 +13,6 @@ pygame.init()
 # Konstanta untuk warna
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0,0,255)
 
 # Konstanta untuk lebar dan tinggi jendela
 WINDOW_WIDTH = 1000
@@ -32,7 +29,6 @@ NUM_CELLS_Y = MAP_SIZE // CELL_SIZE
 num_merah = 0
 MAX_MERAH = 298
 list_merah = []
-
 
 # Membuat jendela Pygame
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -51,7 +47,7 @@ class Peta:
         for _ in range(num_obstacles):
             x = random.randint(0, NUM_CELLS_X - 1)
             y = random.randint(0, NUM_CELLS_Y - 1)
-            # Hindari penempatan rintangan pada posisi awal pemain atau musuh
+            # Hindari penempatan rintangan pada posisi awal merah dan hijau
             while (x, y) == (droid_merah.x, droid_merah.y) or (x, y) == (droid_hijau.x, droid_hijau.y):
                 x = random.randint(0, NUM_CELLS_X - 1)
                 y = random.randint(0, NUM_CELLS_Y - 1)
@@ -89,7 +85,7 @@ class Peta:
         self.droid_merah.x = new_x
         self.droid_merah.y = new_y
 
-
+#Kelas Droid Hijau
 class Hijau:
     def __init__(self, peta):
         self.peta = peta
@@ -126,7 +122,7 @@ class Hijau:
         fov_rect.center = hijauX, hijauY
         window.blit(self.fov_images[self.current_fov_index], fov_rect)
         
-# Kelas Pemain
+# Kelas Droid Merah
 class Merah:
     def __init__(self, peta):
         self.peta = peta
@@ -375,7 +371,7 @@ pengaturan = Button(
         pressedColour=(250, 250, 250))
 kurangi_red = Button(
         window, 740, 560, 100, 40,
-        text='Kurangi Merah',
+        text='Drop Merah',
         textColour=(250,250,250),
         fontSize=20,
         margin=20,
@@ -435,8 +431,6 @@ while running:
          
     # Menggambar latar belakang
     window.fill(WHITE)
-    
-    # Menggambar peta dan pemain
     peta.draw()
     
     if green_sight and not red_sight:    
@@ -459,7 +453,7 @@ while running:
     droid_hijau.current_fov_index = current_fov_index
       
     if game_started and not game_paused:
-    # Memeriksa apakah pemain mencapai target musuh
+    # Memeriksa hijau bertemu merah di cell yg sama
         distance = droid_merah.calculate_distance(droid_merah.x, droid_merah.y, droid_hijau.x, droid_hijau.y)         
         if distance == 0 and droid_merah.x == droid_hijau.x and droid_merah.y == droid_hijau.y:
            reached_hijau = True
